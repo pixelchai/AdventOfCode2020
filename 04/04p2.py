@@ -15,19 +15,15 @@ for passport in raw.split("\n\n"):
             continue
         if k == "eyr" and not(len(v) == 4 and 2020 <= int(v) <= int(2030)):
             continue
-        if k == "hgt":
-            if not(v.endswith("cm") and 150 <= int(v[:-2]) <= 193) \
-                    and not(v.endswith("in") and 59 <= int(v[:-2]) <= 76):
-                continue
-        if k == "hcl":
-            if not re.fullmatch(r"#[0-9a-f]{6}", v):
-                continue
-        if k == "ecl":
-            if not any([v==x for x in ("amb", "blu", "brn", "gry", "grn", "hzl", "oth")]):
-                continue
-        if k == "pid":
-            if not (len(v) == 9 and v.isnumeric()):
-                continue
+        if k == "hgt" and not(v.endswith("cm") and 150 <= int(v[:-2]) <= 193) \
+                      and not(v.endswith("in") and 59 <= int(v[:-2]) <= 76):
+            continue
+        if k == "hcl" and not re.fullmatch(r"#[0-9a-f]{6}", v):
+            continue
+        if k == "ecl" and not any([v==x for x in ("amb", "blu", "brn", "gry", "grn", "hzl", "oth")]):
+            continue
+        if k == "pid" and not (len(v) == 9 and v.isnumeric()):
+            continue
 
         d[k] = d.get(k, 0) + 1
 
