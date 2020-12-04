@@ -20,7 +20,7 @@ for passport in raw.split("\n\n"):
             continue
         if k == "hcl" and not re.fullmatch(r"#[0-9a-f]{6}", v):
             continue
-        if k == "ecl" and not any([v==x for x in ("amb", "blu", "brn", "gry", "grn", "hzl", "oth")]):
+        if k == "ecl" and not v in ("amb", "blu", "brn", "gry", "grn", "hzl", "oth"):
             continue
         if k == "pid" and not (len(v) == 9 and v.isnumeric()):
             continue
