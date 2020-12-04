@@ -1,4 +1,4 @@
-from utils import *
+import re
 
 with open("input.txt", "r") as f:
     raw = f.read()
@@ -20,13 +20,13 @@ for passport in raw.split("\n\n"):
                     and not(v.endswith("in") and 59 <= int(v[:-2]) <= 76):
                 continue
         if k == "hcl":
-            if not re.match(r"#[0-9a-f]{6}", v):
+            if not re.fullmatch(r"#[0-9a-f]{6}", v):
                 continue
         if k == "ecl":
             if not any([v==x for x in ("amb", "blu", "brn", "gry", "grn", "hzl", "oth")]):
                 continue
         if k == "pid":
-            if not len(v) == 9:
+            if not (len(v) == 9 and v.isnumeric()):
                 continue
 
         d[k] = d.get(k, 0) + 1
