@@ -1,40 +1,32 @@
-from utils import *
-
 with open("input.txt", "r") as f:
     raw = f.read()
 
 def parse_line_col(line):
-    line = line[-3:]
     values = list(range(8))
-    for c in line:
+    for c in line[-3:]:
         if c == 'L':
             values = values[:len(values) // 2]
         elif c == 'R':
             values = values[len(values) // 2:]
     return values[0]
 
-def parse_line_seat(line):
-    line=line[:7]
+def parse_line_row(line):
     values = list(range(128))
-    for c in line:
+    for c in line[:7]:
         if c=='F':
-            values = values[:len(values)//2]
+            values = values[:len(values) // 2]
         elif c=='B':
-            values = values[len(values)//2:]
+            values = values[len(values) // 2:]
     return values[0]
 
 def get_id(line):
-    return parse_line_seat(line)*8+parse_line_col(line)
+    return parse_line_row(line) * 8 + parse_line_col(line)
 
-ids=[]
+ids = []
 for line in raw.splitlines():
     ids.append(get_id(line))
 
-not_ins=[]
-for i in range(888):
+for i in range(max(ids)):
     if i not in ids:
-        not_ins.append(i)
-
-for a in not_ins:
-    if (a+1) in ids and (a-1) in ids:
-        print(a)
+        if (i + 1) in ids and (i - 1) in ids:
+            print(i)
