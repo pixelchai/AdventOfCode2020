@@ -129,9 +129,7 @@ def valid_coords(i, j, n, m):
 def adjacent_difference(it, f=operator.sub):
     return starmap(lambda x, y: f(y, x), pairwise(it))
 
-# memoize function
-def memoize(func):
-    @functools.lru_cache(maxsize=None)
-    def wrap(*args, **kwargs):
-        return func(*args, **kwargs)
-    return wrap
+try:
+    memoize = functools.cache
+except AttributeError:
+    memoize = functools.lru_cache(maxsize=None)
