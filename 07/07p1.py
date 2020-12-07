@@ -11,34 +11,34 @@ for line in raw.splitlines():
     if post.strip().startswith("no other"):
         rule_dict[pre_bag] = {}
     else:
-        allowed_dict = {}
+        constraint_dict = {}
         for match in re.finditer(r"(\d) (\w+ \w+) bags?", post):
             count, bag_type = match.groups()
-            allowed_dict[bag_type] = count
-        rule_dict[pre_bag] = allowed_dict
+            constraint_dict[bag_type] = int(count)
+        rule_dict[pre_bag] = constraint_dict
 
-def has_target(bag, target="shiny gold"):
+def has_target(bag, target):
     if target in rule_dict[bag]:
         return True
     else:
-        for k, v in rule_dict[bag].items():
-            if has_target(k, target):
-                return True
-        return False
+        return any([has_target(k, target) for k in rule_dict[bag].keys()])
 
 def count_bags(bag):
     """
     count bags (including self)
     """
-    a = rule_dict[bag]
     s = 1
-    for k, v in a.items():
-        s += count_bags(k)*int(v)
+    for k, v in rule_dict[bag].items():
+        s += count_bags(k)*v
     return s
 
+# part one
 s = 0
-for k, v in rule_dict.items():
-    if has_target(k):
+for top_level_bag in rule_dict.keys():
+    if has_target(top_level_bag, "shiny gold"):
         s+=1
-
 print(s)
+
+# part two
+# -1 because considering how many OTHER bags inside shiny gold (discount self)
+print(count_bags("shiny gold")-1)
