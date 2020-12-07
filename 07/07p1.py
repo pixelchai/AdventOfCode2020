@@ -8,14 +8,12 @@ rule_dict = {}
 for line in raw.splitlines():
     pre, post = line.split("contain")
     pre_bag = pre.replace("bags", "").strip()
-    if post.strip().startswith("no other"):
-        rule_dict[pre_bag] = {}
-    else:
-        constraint_dict = {}
-        for match in re.finditer(r"(\d) (\w+ \w+) bags?", post):
-            count, bag_type = match.groups()
-            constraint_dict[bag_type] = int(count)
-        rule_dict[pre_bag] = constraint_dict
+
+    constraint_dict = {}
+    for match in re.finditer(r"(\d) (\w+ \w+) bags?", post):
+        count, bag_type = match.groups()
+        constraint_dict[bag_type] = int(count)
+    rule_dict[pre_bag] = constraint_dict
 
 def has_target(bag, target):
     if target in rule_dict[bag]:
