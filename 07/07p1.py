@@ -1,4 +1,4 @@
-import re
+from utils import *
 
 with open("input.txt", "r") as f:
     raw = f.read()
@@ -15,12 +15,14 @@ for line in raw.splitlines():
         constraint_dict[bag_type] = int(count)
     rule_dict[pre_bag] = constraint_dict
 
+@memoize
 def has_target(bag, target):
     if target in rule_dict[bag]:
         return True
     else:
         return any([has_target(k, target) for k in rule_dict[bag].keys()])
 
+@memoize
 def count_bags(bag):
     """
     count bags (including self)
