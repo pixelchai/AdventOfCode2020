@@ -1,4 +1,5 @@
-from utils import *
+import re
+from typing import Tuple
 
 with open("input.txt", "r") as f:
     raw = f.read()
