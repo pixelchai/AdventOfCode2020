@@ -18,16 +18,17 @@ def exec_instructions(instructions) -> Tuple[bool, int]:
         except IndexError:
             return cur_line == len(instructions), accumulator
 
-        # increment counts
-        run_counts[cur_line] += 1
-        if any([x > 1 for x in run_counts]):
-            return False, accumulator
-
         # instruction handling
         if op == "jmp":
             cur_line += int(arg) - 1
         elif op == "acc":
             accumulator += int(arg)
+
+        if run_counts[cur_line] > 0:
+            # has been visited before so force halt
+            return False, accumulator
+        else:
+            run_counts[cur_line] += 1
         cur_line += 1
 
 if __name__ == '__main__':
