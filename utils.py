@@ -11,7 +11,7 @@ import operator
 import re
 import sys
 
-from typing import *
+# from typing import *
 
 from itertools import (
     accumulate,
