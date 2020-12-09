@@ -1,5 +1,3 @@
-from utils import *
-
 all_nums = []
 with open("input.txt", "r") as f:
     for line in f:
@@ -26,7 +24,7 @@ def part_one():
 def part_two(invalid_num):
     for i in range(len(all_nums)):
         for j in range(len(all_nums) - i):
-            window = all_nums[i:i + j]
+            window = all_nums[i:i+j]
             if sum(window) == invalid_num:
                 return min(window) + max(window)
 
