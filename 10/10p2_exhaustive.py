@@ -9,9 +9,10 @@ final_joltage = max(all_joltages) + 3  # built in adapter
 all_joltages.append(final_joltage)
 
 # NB: this method is far less efficient when it comes to counting the number of combs
-#     than the other solution -- however, unlike the other solution, it is able to
+#     than the other solution. Unlike the other solution, however, it is able to
 #     produce an exhaustive list of all the combinations, given enough computing power.
-#     Due to the number of combs involved, however, answering aoc with this method is not feasible.
+#     Although it works nicely for smaller inputs, due to the size of the aoc
+#     puzzle input, answering the aoc question with this method is not feasible.
 def find_combs():
     chains = [[0]]
     joltages = set(all_joltages.copy())
