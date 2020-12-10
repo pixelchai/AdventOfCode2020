@@ -31,7 +31,7 @@ def find_combs():
                     if k == 0:
                         chains[i] = new_iteration
                     else:
-                        chains.append(chain + [adapter])
+                        chains.append(new_iteration)
                 else:
                     yield chains.pop(i) + [adapter]
 
