@@ -17,7 +17,6 @@ def find_combs():
     chains = [[0]]
     joltages = set(all_joltages.copy())
 
-    @memoize
     def find_valid_next_adapters(chain):
         for joltage in joltages - set(chain):
             if 1 <= joltage - chain[-1] <= 3:
@@ -25,8 +24,7 @@ def find_combs():
 
     while len(chains) > 0:
         for i, chain in enumerate(chains):
-            # tuple for memoization
-            for k, adapter in enumerate(find_valid_next_adapters(tuple(chain))):
+            for k, adapter in enumerate(find_valid_next_adapters(chain)):
                 new_iteration = chain + [adapter]
 
                 if adapter != final_joltage:
