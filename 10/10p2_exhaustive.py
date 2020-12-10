@@ -5,8 +5,8 @@ with open("input.txt", "r") as f:
     for line in f:
         all_joltages.append(int(line))
 
-terminal_joltage = max(all_joltages) + 3  # built in adapter
-all_joltages.append(terminal_joltage)
+final_joltage = max(all_joltages) + 3  # built in adapter
+all_joltages.append(final_joltage)
 
 # NB: this method is far less efficient when it comes to counting the number of combs
 #     than the other solution -- however, unlike the other solution, it is able to
@@ -28,7 +28,7 @@ def find_combs():
             for k, adapter in enumerate(find_valid_next_adapters(tuple(chain))):
                 new_iteration = chain + [adapter]
 
-                if adapter != terminal_joltage:
+                if adapter != final_joltage:
                     if k == 0:
                         chains[i] = new_iteration
                     else:
