@@ -36,5 +36,4 @@ def find_combs():
                 else:
                     yield chains.pop(i) + [adapter]
 
-combs = list(find_combs())
-print(len(combs))
+print(list(find_combs()))
