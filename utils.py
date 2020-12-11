@@ -170,10 +170,10 @@ class GridUtils:
             col += col_off
 
     def ray(self, row, col, row_off, col_off, stop_cond=None, default=None):
-        try:
-            return list(self.ray_iter(row, col, row_off, col_off, stop_cond))[-1]
-        except IndexError:
-            return default
+        final_val = default
+        for val in self.ray_iter(row, col, row_off, col_off, stop_cond):
+            final_val = val
+        return final_val
 
     def adjacent_rays_iter(self, row, col, stop_cond=None, default=None):
         generators = []
@@ -195,8 +195,6 @@ class GridUtils:
             yield list(self.ray_iter(row, col, row_off, col_off, stop_cond))
 
     def adjacent_rays(self, row, col, stop_cond=None, default=None):
-        for ray_list in self.adjacent_rays_dfs(row, col, stop_cond):
-            try:
-                yield ray_list[-1]
-            except IndexError:
-                yield default
+        for row_off, col_off in self.OFFSETS:
+            yield self.ray(row, col, row_off, col_off, stop_cond, default)
+
