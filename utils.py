@@ -154,7 +154,7 @@ class GridUtils:
             except IndexError:
                 pass
 
-    def ray(self, row, col, row_off, col_off, stop_cond=None):
+    def ray_iter(self, row, col, row_off, col_off, stop_cond=None):
         while True:
             if row + row_off < 0 or col + col_off < 0:
                 break
@@ -169,10 +169,16 @@ class GridUtils:
             row += row_off
             col += col_off
 
-    def adjacent_rays_fill(self, row, col, stop_cond=None, default=None):
+    def ray(self, row, col, row_off, col_off, stop_cond=None, default=None):
+        try:
+            return list(self.ray_iter(row, col, row_off, col_off, stop_cond))[-1]
+        except IndexError:
+            return default
+
+    def adjacent_rays_iter(self, row, col, stop_cond=None, default=None):
         generators = []
         for row_off, col_off in self.OFFSETS:
-            generators.append(self.ray(row, col, row_off, col_off, stop_cond))
+            generators.append(self.ray_iter(row, col, row_off, col_off, stop_cond))
 
         stopped = 0
         while stopped < len(generators):
@@ -184,6 +190,13 @@ class GridUtils:
                     ret.append(default)
             yield ret
 
-    def adjacent_rays(self, row, col, stop_cond=None):
+    def adjacent_rays_dfs(self, row, col, stop_cond=None):
         for row_off, col_off in self.OFFSETS:
-            yield list(self.ray(row, col, row_off, col_off, stop_cond))
+            yield list(self.ray_iter(row, col, row_off, col_off, stop_cond))
+
+    def adjacent_rays(self, row, col, stop_cond=None, default=None):
+        for ray_list in self.adjacent_rays_dfs(row, col, stop_cond):
+            try:
+                yield ray_list[-1]
+            except IndexError:
+                yield default

@@ -1,3 +1,5 @@
+import time
+
 from utils import *
 
 matrix = []
@@ -6,10 +8,11 @@ with open("input.txt", "r") as f:
         matrix.append(list(line.rstrip()))
 
 def update(matrix):
+    grid = GridUtils(matrix)
     new_matrix = [row.copy() for row in matrix]
     for row in range(len(matrix)):
         for col in range(len(matrix[row])):
-            seats = GridUtils(matrix).adjacents(row, col)
+            seats = grid.adjacents(row, col)
             if new_matrix[row][col] == "L" and all([x != "#" for x in seats]):
                 new_matrix[row][col] = "#"
             elif new_matrix[row][col] == "#" and sum([x == "#" for x in seats]) >= 4:
@@ -17,15 +20,11 @@ def update(matrix):
     return new_matrix
 
 def update_v2(matrix):
+    grid = GridUtils(matrix)
     new_matrix = [row.copy() for row in matrix]
     for row in range(len(matrix)):
         for col in range(len(matrix[row])):
-            final_seats = []
-            for ray_list in GridUtils(matrix).adjacent_rays(row, col, lambda val: val in ["#", "L"]):
-                try:
-                    final_seats.append(ray_list[-1])
-                except IndexError:
-                    pass
+            final_seats = tuple(grid.adjacent_rays(row, col, lambda val: val in ["#", "L"]))
             if new_matrix[row][col] == "#" and sum([x == "#" for x in final_seats]) >= 5:
                 new_matrix[row][col] = "L"
             if new_matrix[row][col] == "L" and all([x != "#" for x in final_seats]):
@@ -47,5 +46,7 @@ def count_occupied(matrix):
         s.append(sum([val == "#" for val in row]))
     return sum(s)
 
+initial_time = time.time()
 print(count_occupied(update_until_stable(matrix, update)))  # part one
 print(count_occupied(update_until_stable(matrix, update_v2)))  # part two
+print(time.time() - initial_time)
