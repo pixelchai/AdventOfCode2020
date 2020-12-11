@@ -9,7 +9,7 @@ def update(matrix):
     new_matrix = [row.copy() for row in matrix]
     for row in range(len(matrix)):
         for col in range(len(matrix[row])):
-            seats = adjacents(matrix, row, col)
+            seats = MatrixUtils(matrix).adjacents(row, col)
             if new_matrix[row][col] == "L" and all([x != "#" for x in seats]):
                 new_matrix[row][col] = "#"
             elif new_matrix[row][col] == "#" and sum([x == "#" for x in seats]) >= 4:
@@ -21,7 +21,7 @@ def update_v2(matrix):
     for row in range(len(matrix)):
         for col in range(len(matrix[row])):
             final_seats = []
-            for ray_list in adjacent_rays(matrix, row, col, lambda val: val in ["#", "L"]):
+            for ray_list in MatrixUtils(matrix).adjacent_rays(row, col, lambda val: val in ["#", "L"]):
                 try:
                     final_seats.append(ray_list[-1])
                 except IndexError:

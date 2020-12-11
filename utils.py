@@ -130,60 +130,60 @@ except AttributeError:
 
 from collections import Counter
 
-OFFSETS = [
-    (-1, 0),
-    (-1, 1),
-    (0, 1),
-    (1, 1),
-    (1, 0),
-    (1, -1),
-    (0, -1),
-    (-1, -1)
-]
+class MatrixUtils:
+    OFFSETS = [
+        (-1, 0),
+        (-1, 1),
+        (0, 1),
+        (1, 1),
+        (1, 0),
+        (1, -1),
+        (0, -1),
+        (-1, -1)
+    ]
 
+    def __init__(self, matrix):
+        self.matrix = matrix
 
-def adjacents(matrix, row, col):
-    for row_off, col_off in OFFSETS:
-        if row + row_off < 0 or col + col_off < 0:
-            continue
-        try:
-            yield matrix[row + row_off][col + col_off]
-        except IndexError:
-            pass
-
-
-def ray(matrix, row, col, row_off, col_off, stop_cond=None):
-    while True:
-        if row + row_off < 0 or col + col_off < 0:
-            break
-        try:
-            ret = matrix[row + row_off][col + col_off]
-            yield ret
-            if stop_cond is not None:
-                if stop_cond(ret):
-                    break
-        except IndexError:
-            break
-        row += row_off
-        col += col_off
-
-
-def adjacent_rays_fill(matrix, row, col, stop_cond=None, default=None):
-    generators = []
-    for row_off, col_off in OFFSETS:
-        generators.append(ray(matrix, row, col, row_off, col_off, stop_cond))
-
-    stopped = 0
-    while stopped < len(generators):
-        ret = []
-        for generator in generators:
+    def adjacents(self, row, col):
+        for row_off, col_off in self.OFFSETS:
+            if row + row_off < 0 or col + col_off < 0:
+                continue
             try:
-                ret.append(next(generator))
-            except StopIteration:
-                ret.append(default)
-        yield ret
+                yield self.matrix[row + row_off][col + col_off]
+            except IndexError:
+                pass
 
+    def ray(self, row, col, row_off, col_off, stop_cond=None):
+        while True:
+            if row + row_off < 0 or col + col_off < 0:
+                break
+            try:
+                ret = self.matrix[row + row_off][col + col_off]
+                yield ret
+                if stop_cond is not None:
+                    if stop_cond(ret):
+                        break
+            except IndexError:
+                break
+            row += row_off
+            col += col_off
 
-def adjacent_rays(matrix, row, col, stop_cond=None):
-    for row_off, col_off in OFFSETS:
-        yield list(ray(matrix, row, col, row_off, col_off, stop_cond))
+    def adjacent_rays_fill(self, row, col, stop_cond=None, default=None):
+        generators = []
+        for row_off, col_off in self.OFFSETS:
+            generators.append(self.ray(row, col, row_off, col_off, stop_cond))
+
+        stopped = 0
+        while stopped < len(generators):
+            ret = []
+            for generator in generators:
+                try:
+                    ret.append(next(generator))
+                except StopIteration:
+                    ret.append(default)
+            yield ret
+
+    def adjacent_rays(self, row, col, stop_cond=None):
+        for row_off, col_off in self.OFFSETS:
+            yield list(self.ray(row, col, row_off, col_off, stop_cond))
