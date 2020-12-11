@@ -46,7 +46,5 @@ def count_occupied(matrix):
         s.append(sum([val == "#" for val in row]))
     return sum(s)
 
-initial_time = time.time()
 print(count_occupied(update_until_stable(matrix, update)))  # part one
 print(count_occupied(update_until_stable(matrix, update_v2)))  # part two
-print(time.time() - initial_time)
