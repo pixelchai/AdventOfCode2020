@@ -116,14 +116,6 @@ def starfilter(predicate, iterable):
         if predicate(*t):
             yield t
 
-
-def neighbours(i, j):
-    yield i - 1, j
-    yield i + 1, j
-    yield i, j - 1
-    yield i, j + 1
-
-
 def valid_coords(i, j, n, m):
     return 0 <= i < n and 0 <= j < m
 
@@ -137,3 +129,61 @@ except AttributeError:
     memoize = functools.lru_cache(maxsize=None)
 
 from collections import Counter
+
+OFFSETS = [
+    (-1, 0),
+    (-1, 1),
+    (0, 1),
+    (1, 1),
+    (1, 0),
+    (1, -1),
+    (0, -1),
+    (-1, -1)
+]
+
+
+def adjacents(matrix, row, col):
+    for row_off, col_off in OFFSETS:
+        if row + row_off < 0 or col + col_off < 0:
+            continue
+        try:
+            yield matrix[row + row_off][col + col_off]
+        except IndexError:
+            pass
+
+
+def ray(matrix, row, col, row_off, col_off, stop_cond=None):
+    while True:
+        if row + row_off < 0 or col + col_off < 0:
+            break
+        try:
+            ret = matrix[row + row_off][col + col_off]
+            yield ret
+            if stop_cond is not None:
+                if stop_cond(ret):
+                    break
+        except IndexError:
+            break
+        row += row_off
+        col += col_off
+
+
+def adjacent_rays_fill(matrix, row, col, stop_cond=None, default=None):
+    generators = []
+    for row_off, col_off in OFFSETS:
+        generators.append(ray(matrix, row, col, row_off, col_off, stop_cond))
+
+    stopped = 0
+    while stopped < len(generators):
+        ret = []
+        for generator in generators:
+            try:
+                ret.append(next(generator))
+            except StopIteration:
+                ret.append(default)
+        yield ret
+
+
+def adjacent_rays(matrix, row, col, stop_cond=None):
+    for row_off, col_off in OFFSETS:
+        yield list(ray(matrix, row, col, row_off, col_off, stop_cond))
