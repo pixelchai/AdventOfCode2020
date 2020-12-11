@@ -130,7 +130,7 @@ except AttributeError:
 
 from collections import Counter
 
-class MatrixUtils:
+class GridUtils:
     OFFSETS = [
         (-1, 0),
         (-1, 1),
@@ -142,15 +142,15 @@ class MatrixUtils:
         (-1, -1)
     ]
 
-    def __init__(self, matrix):
-        self.matrix = matrix
+    def __init__(self, grid):
+        self.grid = grid
 
     def adjacents(self, row, col):
         for row_off, col_off in self.OFFSETS:
             if row + row_off < 0 or col + col_off < 0:
                 continue
             try:
-                yield self.matrix[row + row_off][col + col_off]
+                yield self.grid[row + row_off][col + col_off]
             except IndexError:
                 pass
 
@@ -159,7 +159,7 @@ class MatrixUtils:
             if row + row_off < 0 or col + col_off < 0:
                 break
             try:
-                ret = self.matrix[row + row_off][col + col_off]
+                ret = self.grid[row + row_off][col + col_off]
                 yield ret
                 if stop_cond is not None:
                     if stop_cond(ret):
