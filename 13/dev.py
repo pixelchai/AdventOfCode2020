@@ -1,5 +1,8 @@
 from utils import *
 
+# NB: incomplete + messy code I wrote while experimenting and trying to find a solution. Kept for archiving purposes.
+#     see 13p2.py for my final solution
+
 # print(lcm(7,13))  # = 91
 
 for i in range(1000):

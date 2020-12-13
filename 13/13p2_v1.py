@@ -1,5 +1,8 @@
 from utils import *
 
+# NB: incomplete + messy code I wrote while experimenting and trying to find a solution. Kept for archiving purposes.
+#     see 13p2.py for my final solution
+
 with open("input.txt", "r") as f:
     eariest_time = int(f.readline())
     bus_ids = [(int(x) if x != "x" else None) for x in f.readline().split(",")]

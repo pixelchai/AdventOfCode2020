@@ -1,5 +1,8 @@
 from utils import *
 
+# NB: incomplete + messy code I wrote while experimenting and trying to find a solution. Kept for archiving purposes.
+#     see 13p2.py for my final solution
+
 def is_seq(input_list, alt=True):
     last=-1
     for val in input_list:
