@@ -198,3 +198,6 @@ class GridUtils:
         for row_off, col_off in self.OFFSETS:
             yield self.ray(row, col, row_off, col_off, stop_cond, default)
 
+def lcm(*denominators):
+    # https://stackoverflow.com/a/49816058/5013267
+    return reduce(lambda a,b: a*b // math.gcd(a,b), denominators)
