@@ -22,9 +22,9 @@ print(target_offs)
 
 ts = 0
 step = 1
-num_found = 0
+max_valid_count = 1
 while True:
-    for around_off in range(-(num_found+1), (num_found+2)):
+    for around_off in range(-20, 20):
         dev_ts = ts + around_off
         if dev_ts > 0:
             dev_string = "{:05d}".format(dev_ts)
@@ -34,8 +34,21 @@ while True:
             print(dev_string)
     print("...")
 
-    if ts%7 == 0 and (ts+target_offs[1])%13==0:
-        print("aaaaaaaaaaaa")
+    valid = []
+    for i, bus_id in enumerate(bus_ids):
+        if (ts+target_offs[i])%bus_id == 0:
+            valid.append(bus_id)
+        else:
+            break
+
+    valid_count = len(valid)
+    if valid_count > max_valid_count:
+        print("aaaaaaaaa")
+        max_valid_count = valid_count
+        step = lcm(*valid)
+
+    if valid_count >= len(bus_ids):
+        break
 
     # if ts%7 == 0 and (ts+target_offs[1])%13==0 and (ts+target_offs[2])%59 ==0:
     #     print("aaaaaaaaaaaa")
@@ -45,5 +58,3 @@ while True:
 
     ts += step
 
-    if ts > 2000:
-        break
