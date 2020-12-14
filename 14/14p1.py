@@ -8,16 +8,14 @@ def get_bin(x, n=0):
     return format(x, 'b').zfill(n)
 
 def apply_mask(val_str, mask_str):
-    ret = ""
-    for i, c in enumerate(val_str):
-        ret += c if mask_str[i] == "X" else mask_str[i]
-    return ret
+    return "".join((c if mask_str[i] == "X" else mask_str[i]
+                    for i, c in enumerate(val_str)))
 
 mask = ""
 mem = defaultdict(int)
 for line in raw.splitlines():
     if line.startswith("mask"):
-        mask, = re.match("mask = (.+)", line).groups()
+        mask = line[len('mask = '):]
     else:
         adr, raw_val = re.match(r"mem\[(\d+)\]\s*=\s*(\d+)", line).groups()
         val_bin = get_bin(int(raw_val), len(mask))
