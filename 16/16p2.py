@@ -66,9 +66,7 @@ for ticket in nearby_tickets:
         continue  # ignore invalid ticket
 
     for i, val in enumerate(ticket):
-        prev_set = pos.get(i, set(rules.keys()))
-        new_set = prev_set & set(get_rules_satisfied_by(val))
-        pos[i] = new_set
+        pos[i] = pos.get(i, set(rules.keys())) & set(get_rules_satisfied_by(val))
         pos = collapse(pos)
 
 def field_to_index(field):
@@ -88,5 +86,5 @@ print(s)
 p = 1
 for field in rules.keys():
     if field.startswith("departure"):
-        p *= (your_ticket[field_to_index(field)])
+        p *= your_ticket[field_to_index(field)]
 print(p)
