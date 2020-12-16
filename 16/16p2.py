@@ -52,15 +52,6 @@ def ticket_is_invalid(ticket):
         return True
     return False
 
-# part 1
-s = 0
-for ticket in nearby_tickets:
-    s += sum(get_invalid_vals(ticket))
-print(s)
-
-# filter out all invalid tickets
-nearby_tickets = [ticket for ticket in nearby_tickets if not ticket_is_invalid(ticket)]
-
 pos = {}  # set of possible fields for each index. key=index, value=set(possible fields)
 def collapse(pos):
     for i, p_set in pos.items():
@@ -71,6 +62,9 @@ def collapse(pos):
     return pos
 
 for ticket in nearby_tickets:
+    if ticket_is_invalid(ticket):
+        continue  # ignore invalid ticket
+
     for i, val in enumerate(ticket):
         prev_set = pos.get(i, set(rules.keys()))
         new_set = prev_set & set(get_rules_satisfied_by(val))
@@ -83,6 +77,12 @@ def field_to_index(field):
     for i, v in pos.items():
         if field in v:
             return i
+
+# part 1
+s = 0
+for ticket in nearby_tickets:
+    s += sum(get_invalid_vals(ticket))
+print(s)
 
 # part 2
 p = 1
