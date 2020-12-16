@@ -61,26 +61,26 @@ print(s)
 # filter out all invalid tickets
 nearby_tickets = [ticket for ticket in nearby_tickets if not ticket_is_invalid(ticket)]
 
-possibilities = {}
-def collapse(possibles):
-    for i, p_set in possibles.items():
+pos = {}  # set of possible fields for each index. key=index, value=set(possible fields)
+def collapse(pos):
+    for i, p_set in pos.items():
         if len(p_set) == 1:
-            for j in range(len(possibles)):
+            for j in range(len(pos)):
                 if j != i:
-                    possibles[j] = possibles[j] - p_set
-    return possibles
+                    pos[j] = pos[j] - p_set
+    return pos
 
 for ticket in nearby_tickets:
     for i, val in enumerate(ticket):
-        prev_set = possibilities.get(i, set(rules.keys()))
+        prev_set = pos.get(i, set(rules.keys()))
         new_set = prev_set & set(get_rules_satisfied_by(val))
-        possibilities[i] = new_set
-        possibilities = collapse(possibilities)
+        pos[i] = new_set
+        pos = collapse(pos)
 
 def field_to_index(field):
     # assumption: the number of possible fields for each index is exactly 1
     #             (for the fields we are interested in) therefore, search greedily
-    for i, v in possibilities.items():
+    for i, v in pos.items():
         if field in v:
             return i
 
