@@ -36,11 +36,8 @@ def get_rules_satisfied_by(val):
                 yield rule
 
 def is_valid(val):
-    for rule_ranges in rules.values():
-        for lower, upper in rule_ranges:
-            if lower <= val <= upper:
-                return True
-    return False
+    # NB: guaranteed to short-circuit for efficiency: https://stackoverflow.com/a/14866380/5013267
+    return any(get_rules_satisfied_by(val))
 
 def get_invalid_vals(ticket):
     for val in ticket:
@@ -48,9 +45,7 @@ def get_invalid_vals(ticket):
             yield val
 
 def ticket_is_invalid(ticket):
-    for _ in get_invalid_vals(ticket):
-        return True
-    return False
+    return any(get_invalid_vals(ticket))
 
 pos = {}  # set of possible fields for each index. key=index, value=set(possible fields)
 def collapse(pos):
